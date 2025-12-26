@@ -8,11 +8,7 @@ OUTPUT_DIR = "outputs"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def auto_align_images(images):
-    """
-    Auto-align using MTB (Median Threshold Bitmap)
-    This is used in HDR pipelines to align exposures
-    even when brightness/exposure differs significantly.
-    """
+    
 
     try:
         # Convert all images to grayscale for robust alignment
@@ -41,7 +37,12 @@ def process_hdr(images):
     images = auto_align_images(images)
 
     # Step 2: Exposure Fusion (Mertens)
-    merge_mertens = cv2.createMergeMertens()
+    merge_mertens = cv2.createMergeMertens(
+    contrast_weight=1.0,
+    saturation_weight=0.8,
+    exposure_weight=0.6
+)
+
     hdr = merge_mertens.process(images)
     hdr_8bit = np.clip(hdr * 255, 0, 255).astype("uint8")
 
@@ -55,7 +56,7 @@ def process_hdr(images):
     hist_path = f"{OUTPUT_DIR}/{hist_file}"
     compare_path = f"{OUTPUT_DIR}/{compare_file}"
 
-    # Save HDR
+
     cv2.imwrite(hdr_path, hdr_8bit)
 
     # Side-by-side comparison
