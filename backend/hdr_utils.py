@@ -16,8 +16,7 @@ def auto_align_images(images):
 
         # Create MTB aligner
         alignMTB = cv2.createAlignMTB()
-        alignMTB.setMaxBits(6)  
-        alignMTB.setExcludedRange(10)  
+        alignMTB.setMaxBits(6) 
 
         # Align images in place
         alignMTB.process(images, images)
@@ -79,3 +78,4 @@ def process_hdr(images):
         f"outputs/{hist_file}",
         f"outputs/{compare_file}"
     )
+
